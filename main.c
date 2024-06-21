@@ -1,7 +1,16 @@
-#include <stdio.h>
-#include "TARVBM/TARVBM.h"
+#include "criacao_de_arquivos.c"
 
-// transformar a informação em 284 arqvs binarios
+
+
+
+
+
+int main()
+{
+    criar_arquivos("EURO.txt");
+    return 0;
+}
+
 
 // criar a arvore b+ dos arqvs binarios
 

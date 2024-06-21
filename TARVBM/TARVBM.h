@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int boolean;
 
 typedef struct arvbm{
-  int nchaves, folha, *chave;
+  int nchaves, *chave;
+  boolean folha;
   struct arvbm **filho, *prox;
 }TARVBM;
 
