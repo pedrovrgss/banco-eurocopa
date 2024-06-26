@@ -8,12 +8,25 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef int endereco;
 typedef int boolean;
 
 #define true 1
 #define false 0
+
+typedef struct jogador {
+    int id;
+    int numero_camisa;
+    char posicao[3];
+    char nome[50];
+    char data_nascimento[20];
+    int partidas_selecao;
+    int gols_selecao;
+    char pais_time_atual[50];
+    char nome_time_atual[50];
+} Jogador;
 
 typedef struct arvbm {
     int nchaves, *chave;
@@ -31,6 +44,7 @@ void TARVBMS_imprime(TARVBMS *a, FILE *arquivo);
 void TARVBMS_imprime_chaves(TARVBMS *a, FILE *arquivo);
 void TARVBMS_salva(TARVBMS *no, FILE *arquivo);
 TARVBMS* TARVBMS_carrega(endereco endereco_no, FILE *arquivo);
+void carregar_dados(const char* nome_arquivo, TARVBMS* arvore, int t, FILE* arquivo);
 
 #endif // TARVBMS_H
 
