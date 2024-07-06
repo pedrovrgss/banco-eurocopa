@@ -1,4 +1,4 @@
-#include "CRIA_ARVORE.c"
+#include "BUSCAS.c"
 
 int main(){
     int t;
@@ -8,6 +8,8 @@ int main(){
     CriaArvore("EURO.txt", t);
     printf("\n\nARVORE CRIADA");
 
+    BUSCA_1(raiz(""), t);
+    
     return 0;
 }
 

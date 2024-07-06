@@ -47,6 +47,15 @@ void sobrescrever(char *narq, TARVBS *a, int t) {
     fclose(f);
 }
 
+Jogador* aloca_jogador() {
+    Jogador* novoJogador = (Jogador*)malloc(sizeof(Jogador));
+    if (novoJogador == NULL) {
+        perror("Falha ao alocar memória para o jogador");
+        exit(EXIT_FAILURE); // Encerra o programa em caso de falha
+    }
+    return novoJogador;
+}
+
 TARVBS* ler_arquivo(char *narq, int t) {
     FILE *f = fopen(narq, "rb");
     if (!f) {
@@ -255,6 +264,46 @@ char *TARVBS_busca(char *nome_raiz, int id, int t) {
     return TARVBS_busca(nome_filho, id, t);
 }
 
+void copiarJogador(Jogador *ptr, Jogador jogador) {
+    strcpy(ptr->selecao, jogador.selecao);
+    ptr->id = jogador.id;
+    ptr->camisa = jogador.camisa;
+    strcpy(ptr->pos, jogador.pos);
+    strcpy(ptr->nome, jogador.nome);
+    ptr->capitao = jogador.capitao;
+    ptr->nascimento.dia = jogador.nascimento.dia;
+    strcpy(ptr->nascimento.mes, jogador.nascimento.mes);
+    ptr->nascimento.ano = jogador.nascimento.ano;
+    ptr->idade = jogador.idade;
+    ptr->jogos = jogador.jogos;
+    ptr->gols = jogador.gols;
+    strcpy(ptr->pais, jogador.pais);
+    strcpy(ptr->time, jogador.time);
+}
+
+Jogador* TARVBS_busca_jogador(char *nome_raiz, int id, int t) {
+    char *arquivo = TARVBS_busca(nome_raiz, id, t);
+    if (arquivo != NULL) {
+        TARVBS *arvore = ler_arquivo(arquivo, t);
+        if (arvore != NULL) {
+            Jogador *retorno = aloca_jogador();
+            if (retorno != NULL) {
+                for (int i = 0; i < arvore->nchaves; i++) {
+                    if (arvore->chave[i].id == id) {
+                        copiarJogador(retorno, arvore->chave[i]);
+                        free(arvore->chave);
+                        free(arvore->filho);
+                        free(arvore);
+                        return retorno;
+                    }
+                }
+                free(retorno); // Liberar memória alocada para retorno se não encontrou o jogador
+            }
+        }
+    }
+    return NULL;
+}
+
 void divisao(char *narq_x, int i, char *narq_y, int t) {
     TARVBS *x = ler_arquivo(narq_x, t);
     if (!x) {
@@ -340,7 +389,6 @@ void divisao(char *narq_x, int i, char *narq_y, int t) {
     freeABS(z, t);
     free(narq_z);
 }
-
 
 void insere_nao_completo(char *nomearq, Jogador jogador, int t) {
     TARVBS *a = TARVBS_nova(t);
