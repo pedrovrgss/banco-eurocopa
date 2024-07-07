@@ -2,7 +2,7 @@
 #include <string.h>
 #include "TARVBS/TARVBS.c" 
 
-Jogador criar_jogador(char *linha, const char *selecao) {
+Jogador criar_jogador(char *linha, const char selecao[20]) {
     Jogador jogador;
     char nascimento[30];
     int idade;
@@ -57,21 +57,20 @@ void CriaArvore(char *nome_arq, int t) {
         exit(1);
     }
 
-    char linha[400];
+    char linha[100];
+    memset(linha, -1, sizeof(linha));
     char paisatual[20] = "";
     Jogador jogador;
+    Jogador* aux;
 
     while (fgets(linha, sizeof(linha), banco)) {
         linha[strcspn(linha, "\n")] = '\0';
 
-
         if (strchr(linha, '/') == NULL) {
-            strncpy(paisatual, linha, sizeof(paisatual) - 1);
-            paisatual[sizeof(paisatual) - 1] = '\0';
+            sscanf(linha, "%19s", paisatual);
         } else {
             jogador = criar_jogador(linha, paisatual);
             TARVBS_insere(jogador, t);
-            printf("Jogador '%s' adicionado com sucesso!\n", jogador.nome);
         }
     }
 

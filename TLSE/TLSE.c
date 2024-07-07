@@ -45,7 +45,6 @@ void TLSE_libera(TLSE *l){
 void TLSE_lib_rec(TLSE *l){
   if(l){
     TLSE_lib_rec(l->prox);
-    printf("liberando o elemento %d...\n", l->info);
     free(l);
   }
 }

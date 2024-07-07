@@ -291,8 +291,6 @@ Jogador* TARVBS_busca_jogador(char *nome_raiz, int id, int t) {
                 for (int i = 0; i < arvore->nchaves; i++) {
                     if (arvore->chave[i].id == id) {
                         copiarJogador(retorno, arvore->chave[i]);
-                        free(arvore->chave);
-                        free(arvore->filho);
                         free(arvore);
                         return retorno;
                     }

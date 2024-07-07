@@ -14,7 +14,7 @@ typedef struct data{
 }data;
 
 typedef struct jogador{
-    char selecao[15];
+    char selecao[20];
     int id;
     int camisa;
     char pos[3];
