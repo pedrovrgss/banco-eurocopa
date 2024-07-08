@@ -271,6 +271,98 @@ void BUSCA_6(char *raiz, int t) {
 
 // ======================================================================================================
 
+void BUSCA_9(char *raiz, int t) {
+    const char *narq = "tabs_aux/selecoes.dat";
+    FILE *f = fopen(narq, "rb");
+
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", narq);
+        return;
+    }
+
+    Jogador *aux = aloca_jogador();
+    if (aux == NULL) {
+        printf("Erro ao alocar memória para o jogador.\n");
+        fclose(f);
+        return;
+    }
+
+    char selecao_atual[20], maior_selecao[20];
+    int contador = 0, maior_contador = INT_MIN;
+
+    while (fread(aux, sizeof(Jogador), 1, f) == 1) {
+        if (contador == 0 || strcmp(aux->selecao, selecao_atual) != 0) {
+            if (contador > maior_contador) {
+                maior_contador = contador;
+                strcpy(maior_selecao, selecao_atual);
+            }
+            contador = 0;
+            strcpy(selecao_atual, aux->selecao);
+        }
+        contador++;
+    }
+
+    // Verifica se a última seleção lida tem o maior contador
+    if (contador > maior_contador) {
+        maior_contador = contador;
+        strcpy(maior_selecao, selecao_atual);
+    }
+
+    printf("Selecao com mais jogadores atuando fora do país de origem (%d jogadores): %s\n\n", maior_contador, maior_selecao);
+
+    fclose(f);
+    free(aux);
+}
+// ======================================================================================================
+
+void BUSCA_10(char *raiz, int t) {
+    const char *narq = "tabs_aux/selecoes.dat";
+    FILE *f = fopen(narq, "rb");
+
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo %s\n", narq);
+        return;
+    }
+
+    Jogador *aux = aloca_jogador();
+    if (aux == NULL) {
+        printf("Erro ao alocar memória para o jogador.\n");
+        fclose(f);
+        return;
+    }
+
+    char selecao_atual[20] = "";
+    char menor_selecao[20] = "";
+    int contador = 0, menor_contador = INT_MAX;
+    int primeira_leitura = 1;
+
+    while (fread(aux, sizeof(Jogador), 1, f) == 1) {
+        if (primeira_leitura || strcmp(aux->selecao, selecao_atual) != 0) {
+            if (!primeira_leitura && contador < menor_contador && contador > 0) {
+                menor_contador = contador;
+                strcpy(menor_selecao, selecao_atual);
+            }
+            contador = 0;
+            strcpy(selecao_atual, aux->selecao);
+            primeira_leitura = 0;
+        }
+        contador++;
+    }
+
+    // Verifica se a última seleção lida tem o menor contador
+    if (contador < menor_contador && contador > 0) {
+        menor_contador = contador;
+        strcpy(menor_selecao, selecao_atual);
+    }
+
+    printf("Selecao com menos jogadores atuando fora do país de origem (%d jogadores): %s\n\n", menor_contador, menor_selecao);
+
+    fclose(f);
+    free(aux);
+}
+
+// ======================================================================================================
+
 void BUSCA_11(char *raiz, int t, int id){
     Jogador *jogador = TARVBS_busca_jogador(raiz, id, t);
     if (!jogador) printf("\n\nNão existe nenhum jogador com esse id.\n\n");

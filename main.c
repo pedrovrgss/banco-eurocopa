@@ -136,7 +136,15 @@ int main(){
             case 6:
                 BUSCA_6(raiz(""), t);
                 break;
-            
+
+            case 9: 
+                BUSCA_9(raiz(""), t);
+                break;
+
+            case 10:
+                BUSCA_10(raiz(""), t);
+                break;
+
             case 11: 
                 printf("\nDigite o id do jogador que você quer os dados: ");
                 scanf("%d", &id_selec);
