@@ -151,7 +151,7 @@ void BUSCA_2(char *raiz, int t) {
     free(aux);
     free(aux2);
     fclose(f);
-    
+
     return;
 }
 
@@ -246,6 +246,62 @@ void BUSCA_6(char *raiz, int t) {
     
 }
 
+// ======================================================================================================
+
+void busca13_aux(char *raiz, int t, char *selecao){
+    const char* narq = "tabs_aux/selecoes.dat";
+    FILE *f = fopen(narq, "rb");
+    Jogador *atual = aloca_jogador();
+
+    printf("\nJogadores de %s:\n\n", selecao);
+    while (!feof(f)){
+        fread(atual, sizeof(Jogador), 1, f);
+        if (strcmp(atual -> selecao, selecao) == 0) printf("%s\n", atual -> nome);
+    }
+    fclose(f);
+    free(atual);
+    return;
+}
+
+void BUSCA_13(char *raiz, int t, int opt){
+    switch (opt){
+        case 1: busca13_aux(raiz, t, "Germany");
+        break;
+
+        case 2: busca13_aux(raiz, t, "Scotland");
+        break;
+
+        case 3: busca13_aux(raiz, t, "Croatia");
+        break;
+
+        case 4: busca13_aux(raiz, t, "Albania");
+        break;
+
+        case 5: busca13_aux(raiz, t, "Slovenia");
+        break;
+
+        case 6: busca13_aux(raiz, t, "Denmark");
+        break;
+
+        case 7: busca13_aux(raiz, t, "Netherlands");
+        break;
+
+        case 8: busca13_aux(raiz, t, "France");
+        break;
+
+        case 9: busca13_aux(raiz, t, "Ukraine");
+        break;
+
+        case 10: busca13_aux(raiz, t, "Georgia");
+        break;
+
+        case 11: busca13_aux(raiz, t, "Portugal");
+        break;
+
+        default: printf("Opção inválida");
+    }
+    return;
+}
 
 
 /*

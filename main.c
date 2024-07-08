@@ -130,6 +130,25 @@ int main(){
                 BUSCA_6(raiz(""), t);
                 break;
             
+            case 13:
+                printf("1. Germany\n");
+                printf("2. Scotland\n");
+                printf("3. Croatia\n");
+                printf("4. Albania\n");
+                printf("5. Slovenia\n");
+                printf("6. Denmark\n");
+                printf("7. Netherlands\n");
+                printf("8. France\n");
+                printf("9. Ukraine\n");
+                printf("10. Georgia\n");
+                printf("11. Portugal\n\n");
+                printf("Escolha um numero: ");
+
+                int selecao7;
+                scanf("%d", &selecao7);
+
+                BUSCA_13(raiz(""), t, selecao7);
+
             case 21:
                 loop = false;
                 break;
