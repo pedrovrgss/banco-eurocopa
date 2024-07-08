@@ -156,6 +156,30 @@ void BUSCA_2(char *raiz, int t) {
 
 // ======================================================================================================
 
+void BUSCA_4(char *raiz, int t){
+    const char *narq = "tabs_aux/selecoes.dat";
+    FILE *f = fopen(narq, "rb");
+    Jogador *jogador = aloca_jogador();
+    int contador = 0;
+    fread(jogador, sizeof(Jogador), 1, f);
+    char selec_atual[20];
+    strcpy(selec_atual, jogador -> selecao);
+    fseek(f, 0, SEEK_SET);
+
+    while(!feof(f)){
+        fread(jogador, sizeof(Jogador), 1, f);
+        if (strcmp(selec_atual, jogador -> selecao) == 0) contador++;
+        else{
+            printf("\n%s - %d jogadores", selec_atual, contador);
+            strcpy(selec_atual, jogador -> selecao);
+            contador = 1;
+        }
+    }
+    printf("\n%s - %d jogadores\n\n", selec_atual, contador);
+    return;
+}
+
+// ======================================================================================================
 boolean compara_selecao_pais(const char selecao[20], const char pais[20]){
     for (int i = 0; i < 20; i++){
         if (pais[i] != selecao[i]){

@@ -125,6 +125,10 @@ int main(){
                 BUSCA_2(raiz(""), t);
                 break;
             
+            case 4: 
+                BUSCA_4(raiz(""), t);
+                break;
+
             case 5:
                 BUSCA_5(raiz(""), t);
                 break;
