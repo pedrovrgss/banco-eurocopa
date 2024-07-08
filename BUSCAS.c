@@ -50,7 +50,6 @@ void busca1_aux(char *raiz, int t, TLSE **maior, TLSE **menor, int *maior_idade,
     freeABS(aux, t);
 }
 
-
 void BUSCA_1(char *raiz, int t){
     TLSE *mais_velhos = TLSE_inicializa(), *mais_novos = TLSE_inicializa();
     int maior_idade = INT_MIN, menor_idade = INT_MAX;
@@ -90,7 +89,7 @@ void print_jogador(const Jogador *jogador) {
     printf("Gols: %d\n", jogador->gols);
     printf("Pais: %s\n", jogador->pais);
     printf("Time: %s\n", jogador->time);
-    printf("--------------------------------\n");
+    printf("--------------------------------\n\n");
 }
 
 void BUSCA_2(char *raiz, int t) {
@@ -248,6 +247,125 @@ void BUSCA_6(char *raiz, int t) {
 
 // ======================================================================================================
 
+void BUSCA_11(char *raiz, int t, int id){
+    Jogador *jogador = TARVBS_busca_jogador(raiz, id, t);
+    if (!jogador) printf("\n\nNão existe nenhum jogador com esse id.\n\n");
+    else{
+        print_jogador(jogador);
+    }
+    return;
+}
+
+// ======================================================================================================
+
+void BUSCA_12(char *raiz, int t, int id){
+    Jogador *jogador = TARVBS_busca_jogador(raiz, id, t);
+    if (!jogador) {
+        printf("\n\nNão existe nenhum jogador com esse id.\n\n");
+        return;
+    }
+    free(jogador);
+
+    int i = 0;
+    TARVBS *aux = TARVBS_nova(t);
+    aux = ler_arquivo(TARVBS_busca(raiz, id, t), t);
+    for (i; i < aux -> nchaves; i++) if (aux -> chave[i].id == id) break;
+
+
+    int opcao;
+    printf("\n\nQual dado você deseja alterar?\n\n");
+    printf("1. Número da camisa\n");
+    printf("2. Posição (exceto GK)\n");
+    printf("3. Número de partidas\n");
+    printf("4. Número de gols\n");
+    printf("5. Capitão\n");
+    printf("6. País do time atual\n");
+    printf("7. Nome do time atual\n\n");
+    printf("Digite a opção: ");
+    scanf("%d", &opcao);
+
+    switch (opcao) {
+        case 1:
+                printf("Digite o novo número da camisa: ");
+                scanf("%d", &jogador->camisa);
+                aux->chave[i].camisa = jogador->camisa;
+                sobrescrever(aux->narq, aux, t);
+                printf("Número da camisa alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 2:
+                if (strcmp(jogador->pos, "GK") == 0) {
+                    printf("\nNão é possivel alterar a posição desse jogador\n\n");
+                    break;
+                }
+                printf("Digite a nova posição (exceto GK): ");
+                scanf("%s", jogador->pos);
+                if (strcmp(jogador->pos, "GK") == 0) {
+                    printf("\nNão é possivel alterar a posição desse jogador para GK\n\n");
+                    break;
+                }
+                if (strcmp(jogador->pos, "DF") != 0 && strcmp(jogador->pos, "MF") != 0 && strcmp(jogador->pos, "FW") != 0) {
+                    printf("\nNão existe essa posição\n\n");
+                    break;
+                }
+                strcpy(aux->chave[i].pos, jogador->pos);
+                sobrescrever(aux->narq, aux, t);
+                printf("Posição alterada com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 3:
+                printf("Digite o novo número de partidas: ");
+                scanf("%d", &jogador->jogos);
+                aux->chave[i].jogos = jogador->jogos;
+                sobrescrever(aux->narq, aux, t);
+                printf("Número de partidas alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 4:
+                printf("Digite o novo número de gols: ");
+                scanf("%d", &jogador->gols);
+                aux->chave[i].gols = jogador->gols;
+                sobrescrever(aux->narq, aux, t);
+                printf("Número de gols alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 5:
+                printf("É capitão? (1 para sim, 0 para não): ");
+                int capitao;
+                scanf("%d", &capitao);
+                if (capitao != 1 && capitao != 0) {
+                    printf("\nEntrada inválida\n\n");
+                    break;
+                }
+                jogador->capitao = (boolean)capitao;
+                aux->chave[i].capitao = jogador->capitao;
+                sobrescrever(aux->narq, aux, t);
+                printf("Status de capitão alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 6:
+                printf("Digite o novo país do time atual: ");
+                scanf("%s", jogador->pais);
+                strcpy(aux->chave[i].pais, jogador->pais);
+                sobrescrever(aux->narq, aux, t);
+                printf("País do time atual alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+            case 7:
+                printf("Digite o novo nome do time atual: ");
+                scanf("%s", jogador->time);
+                strcpy(aux->chave[i].time, jogador->time);
+                sobrescrever(aux->narq, aux, t);
+                printf("Nome do time atual alterado com sucesso!\n");
+                print_jogador(TARVBS_busca_jogador(raiz, id, t));
+                break;
+        default:
+            printf("Opção inválida!\n");
+            break;
+    }
+}
+
+// ======================================================================================================
 void busca13_aux(char *raiz, int t, char *selecao){
     const char* narq = "tabs_aux/selecoes.dat";
     FILE *f = fopen(narq, "rb");

@@ -97,8 +97,11 @@ int opcao() {
 int main(){
     delete_criar_pasta("arqvs");
     delete_criar_pasta("tabs_aux");
-
+    int id_selec;
+    int escolha;
     int t;
+    int selecao7;
+
     printf("Digite o grau minimo (Se o valor digitado for menor que 2, t sera considerado igual a 2): ");
     scanf("%d", &t);
 
@@ -111,7 +114,7 @@ int main(){
 
     boolean loop = true;
     while (loop) {
-        int escolha = opcao();
+        escolha = opcao();
         printf("\n\n");
 
         switch (escolha){
@@ -130,6 +133,18 @@ int main(){
                 BUSCA_6(raiz(""), t);
                 break;
             
+            case 11: 
+                printf("\nDigite o id do jogador que você quer os dados: ");
+                scanf("%d", &id_selec);
+                BUSCA_11(raiz(""), t, id_selec);
+                break;
+            
+            case 12:
+                printf("\nDigite o id do jogador que você quer alterar os dados: ");
+                scanf("%d", &id_selec);
+                BUSCA_12(raiz(""), t, id_selec);
+                break;
+
             case 13:
                 printf("1. Germany\n");
                 printf("2. Scotland\n");
@@ -144,7 +159,6 @@ int main(){
                 printf("11. Portugal\n\n");
                 printf("Escolha um numero: ");
 
-                int selecao7;
                 scanf("%d", &selecao7);
 
                 BUSCA_13(raiz(""), t, selecao7);
