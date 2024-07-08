@@ -33,7 +33,7 @@ int conta_jogadores(const char *nome_arquivo) {
     FILE *arquivo = fopen(nome_arquivo, "rb");
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
-        return -1; // Retorna -1 em caso de erro ao abrir o arquivo
+        return -1;
     }
 
     Jogador jogador;
@@ -48,12 +48,10 @@ int conta_jogadores(const char *nome_arquivo) {
 }
 
 void delete_criar_pasta(const char *nome_pasta) {
-    // Comando para deletar a pasta e seus conteúdos recursivamente
     char comando_delete[100];
     snprintf(comando_delete, sizeof(comando_delete), "rm -rf %s", nome_pasta);
     system(comando_delete);
 
-    // Comando para criar a pasta novamente
     char comando_criar[50];
     snprintf(comando_criar, sizeof(comando_criar), "mkdir %s", nome_pasta);
     system(comando_criar);
@@ -125,6 +123,10 @@ int main(){
                 BUSCA_2(raiz(""), t);
                 break;
             
+            case 3: 
+                BUSCA_3(raiz(""), t);
+                break;
+
             case 4: 
                 BUSCA_4(raiz(""), t);
                 break;
@@ -135,6 +137,14 @@ int main(){
 
             case 6:
                 BUSCA_6(raiz(""), t);
+                break;
+
+            case 7: 
+                BUSCA_7(raiz(""), t);
+                break;
+
+            case 8:
+                BUSCA_8(raiz(""), t);
                 break;
 
             case 9: 
@@ -190,10 +200,3 @@ int main(){
 
     return 0;
 }
-
-
-// criar a arvore b+ dos arqvs binarios
-
-// criar 11 tabelas hash ordenadas (em ms) cada uma por um parametro diferente e com a informação do endereço de cada jogador na árvore
-
-// fazer as funções de busca de preferencia em um arquivo separado apenas para essas funções de busca

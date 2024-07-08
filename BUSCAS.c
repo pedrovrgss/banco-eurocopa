@@ -156,6 +156,89 @@ void BUSCA_2(char *raiz, int t) {
 
 // ======================================================================================================
 
+void busca3_aux(char *raiz, int t, TLSE **jogadores) {
+    TARVBS *a = ler_arquivo(raiz, t);
+
+    if (a->folha == 0) {
+        for (int j = 0; j < a->nchaves + 1; j++) {
+            busca3_aux(a->filho[j], t, jogadores);
+        }
+    }
+
+    for (int i = 0; i < a->nchaves; i++) {
+        *jogadores = TLSE_insere(*jogadores, a->chave[i].id);
+    }
+}
+
+void BUSCA_3(char *raiz, int t) {
+    TLSE *jogadores = NULL;
+    busca3_aux(raiz, t, &jogadores);
+
+    if (jogadores == NULL) {
+        printf("Nenhum jogador encontrado.\n");
+        return;
+    }
+
+    Jogador *jogador_atual;
+    int max_atuacoes = INT_MIN, min_atuacoes = INT_MAX;
+    TLSE *mais_atuacoes = NULL, *menos_atuacoes = NULL;
+
+    // Encontrando máximo e mínimo de atuações
+    while (jogadores) {
+        jogador_atual = TARVBS_busca_jogador(raiz, jogadores->info, t);
+
+        if (jogador_atual != NULL) {
+            if (jogador_atual->jogos > max_atuacoes) {
+                max_atuacoes = jogador_atual->jogos;
+                TLSE_libera(mais_atuacoes);
+                mais_atuacoes = TLSE_insere(NULL, jogador_atual->id);
+            } else if (jogador_atual->jogos == max_atuacoes) {
+                mais_atuacoes = TLSE_insere(mais_atuacoes, jogador_atual->id);
+            }
+
+            if (jogador_atual->jogos < min_atuacoes) {
+                min_atuacoes = jogador_atual->jogos;
+                TLSE_libera(menos_atuacoes);
+                menos_atuacoes = TLSE_insere(NULL, jogador_atual->id);
+            } else if (jogador_atual->jogos == min_atuacoes) {
+                menos_atuacoes = TLSE_insere(menos_atuacoes, jogador_atual->id);
+            }
+        }
+
+        jogadores = jogadores->prox;
+    }
+
+    // Exibindo resultados
+    if (max_atuacoes == INT_MIN && min_atuacoes == INT_MAX) {
+        printf("Nenhum jogador encontrado.\n");
+    } else {
+        printf("Jogadores com mais atuacoes (%d jogos):\n", max_atuacoes);
+        while (mais_atuacoes) {
+            jogador_atual = TARVBS_busca_jogador(raiz, mais_atuacoes->info, t);
+            if (jogador_atual != NULL) {
+                printf("\t%s\n", jogador_atual->nome);
+            }
+            mais_atuacoes = mais_atuacoes->prox;
+        }
+
+        printf("Jogadores com menos atuacoes (%d jogos):\n", min_atuacoes);
+        while (menos_atuacoes) {
+            jogador_atual = TARVBS_busca_jogador(raiz, menos_atuacoes->info, t);
+            if (jogador_atual != NULL) {
+                printf("\t%s\n", jogador_atual->nome);
+            }
+            menos_atuacoes = menos_atuacoes->prox;
+        }
+    }
+
+    // Liberando memória
+    TLSE_libera(jogadores);
+    TLSE_libera(mais_atuacoes);
+    TLSE_libera(menos_atuacoes);
+}
+
+// ======================================================================================================
+
 void BUSCA_4(char *raiz, int t){
     const char *narq = "tabs_aux/selecoes.dat";
     FILE *f = fopen(narq, "rb");
@@ -271,6 +354,93 @@ void BUSCA_6(char *raiz, int t) {
 
 // ======================================================================================================
 
+void busca7_aux(char *raiz, int t, int ano, TLSE **l) {
+    TARVBS *a = ler_arquivo(raiz, t);
+    if (!a) return;
+
+    if (a->folha == false) {
+        for (int j = 0; j < t*2; j++) {
+            if (a->filho[j] != NULL && strlen(a->filho[j]) > 10) { // Mantendo o loop como estava
+                busca7_aux(a->filho[j], t, ano, l);
+            }
+        }
+    }
+
+    for (int i = 0; i < a->nchaves; i++) {
+        if (a->chave[i].nascimento.ano == ano) {
+            *l = TLSE_insere(*l, a->chave[i].id);
+        }
+    }
+}
+
+void BUSCA_7(char *raiz, int t) {
+    printf("\n\nDigite um ano: ");
+    int ano;
+    scanf("%d", &ano);
+
+    TLSE *list = TLSE_inicializa();
+    busca7_aux(raiz, t, ano, &list);
+
+    
+    Jogador *jogador_atual;
+    printf("Nascidos em %d: \n", ano);
+    while (list){
+        jogador_atual = TARVBS_busca_jogador(raiz, list -> info, t);
+        printf("\t%s", jogador_atual -> nome);
+        list = list -> prox;
+    }  
+}
+
+// ======================================================================================================
+
+void busca8_aux(char *raiz, int t, char *mes, TLSE **l) {
+    TARVBS *a = ler_arquivo(raiz, t);
+    if (!a) return;
+
+    if (a->folha == false) {
+        for (int j = 0; j < t * 2; j++) {
+            if (a->filho[j] != NULL && strlen(a->filho[j]) > 10) {
+                busca8_aux(a->filho[j], t, mes, l);
+            }
+        }
+    }
+
+    for (int i = 0; i < a->nchaves; i++) {
+        if (strcmp(a->chave[i].nascimento.mes, mes) == 0) {
+            *l = TLSE_insere(*l, a->chave[i].id);
+        }
+    }
+}
+
+void BUSCA_8(char *raiz, int t) {
+    printf("\n\nDigite um mes: ");
+    char mes[10]; // Aloca memória suficiente para armazenar o mês
+    scanf("%9s", mes); // Limita a entrada a 9 caracteres para evitar estouro de buffer
+
+    TLSE *list = TLSE_inicializa();
+
+    busca8_aux(raiz, t, mes, &list);
+
+    printf("Nascidos em %s: \n", mes);
+    Jogador *jogador_atual = aloca_jogador();
+    if (!jogador_atual) {
+        perror("Erro ao alocar memória para jogador");
+        TLSE_libera(list);
+        return;
+    }
+
+    TLSE *current = list;
+    while (current) {
+        jogador_atual = TARVBS_busca_jogador(raiz, current->info, t);
+        printf("\t%s\n", jogador_atual->nome);
+        current = current->prox;
+    }
+
+    free(jogador_atual);
+    TLSE_libera(list);
+}
+
+// ======================================================================================================
 void BUSCA_9(char *raiz, int t) {
     const char *narq = "tabs_aux/selecoes.dat";
     FILE *f = fopen(narq, "rb");
@@ -538,22 +708,4 @@ void BUSCA_13(char *raiz, int t, int opt){
 }
 
 
-/*
-        ESTRUTURA PADRÃO PRA BUSCA NA ÁRVORE
-
-    void busca{n}_aux(char *raiz, int t) {
-        TARVBS *a = ler_arquivo(raiz, t);
-
-        if (a->folha == false) {
-            for (int j = 0; strlen(a->filho[j]) > 10; j++) {
-                busca{n}_aux(a -> filho[j], t);
-            }
-        }
-
-        for (int i = 0; i < a->nchaves; i++) {
-        {aqui entra a lógica da busca}
-    }
-
-}
-*/
 

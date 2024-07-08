@@ -10,10 +10,8 @@ Jogador criar_jogador(char *linha, const char selecao[20]) {
     char nome[50];
     char *pos_abre_parenteses;
 
-    // Inicializar as strings da estrutura jogador para garantir que não haja lixo
     memset(&jogador, 0, sizeof(jogador));
 
-    // Ler os dados formatados do jogador
     sscanf(linha, "%d/%d/%2s/%29[^/]/ %[^(](aged %d)/%d/%d/%19[^/]/%24[^\n]",
            &jogador.id,
            &jogador.camisa,
@@ -26,10 +24,9 @@ Jogador criar_jogador(char *linha, const char selecao[20]) {
            jogador.pais,
            jogador.time);
 
-    // Verificar se o jogador é capitão
     pos_abre_parenteses = strchr(nome, '(');
     if (pos_abre_parenteses != NULL) {
-        *pos_abre_parenteses = '\0'; // Remove tudo a partir do '('
+        *pos_abre_parenteses = '\0'; 
         jogador.capitao = true;
     } else {
         jogador.capitao = false;
