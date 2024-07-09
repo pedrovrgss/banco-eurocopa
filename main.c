@@ -9,7 +9,6 @@ void ler_jogadores(const char *nome_arquivo) {
 
     Jogador jogador;
 
-    // Lê cada jogador até o final do arquivo
     while (fread(&jogador, sizeof(Jogador), 1, arquivo) == 1) {
         printf("Nome: %s\n", jogador.nome);
         printf("Idade: %d\n", jogador.idade);

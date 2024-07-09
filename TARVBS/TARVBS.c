@@ -228,15 +228,8 @@ char * TARVBS_cria(int t) {
 }
 
 char *TARVBS_busca(char *nome_raiz, int id, int t) {
-    FILE *f = fopen(nome_raiz, "rb");
-    if (!f) {
-        perror("Erro ao abrir arquivo");
-        return NULL;
-    }
-
-    TARVBS *aux = TARVBS_nova(t);
+    TARVBS *aux = ler_arquivo(nome_raiz, t);
     if (!aux) {
-        fclose(f);
         perror("Erro ao alocar memória para TARVBS");
         return NULL;
     }
@@ -475,6 +468,7 @@ void TARVBS_insere(Jogador jogador, int t) {
     insere_nao_completo(raiz(""), jogador, t);
     return;
 }
+
 
 /*
 insere:

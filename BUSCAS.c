@@ -95,23 +95,33 @@ void print_jogador(const Jogador *jogador) {
 void BUSCA_2(char *raiz, int t) {
     const char *narq = "tabs_aux/selecoes.dat";
     FILE *f = fopen(narq, "rb");
+    if (!f) {
+        perror("Erro ao abrir arquivo");
+        return;
+    }
+
     char selecao_atual[15];
     Jogador *aux = aloca_jogador(), *aux2 = aloca_jogador();
-    fread(aux, sizeof(Jogador), 1, f);
-    strcpy(selecao_atual, aux -> selecao);
+    if (fread(aux, sizeof(Jogador), 1, f) != 1) {
+        perror("Erro ao ler primeiro jogador");
+        free(aux);
+        free(aux2);
+        fclose(f);
+        return;
+    }
+    strcpy(selecao_atual, aux->selecao);
     int maisjogos = INT_MIN, menosjogos = INT_MAX;
 
     TLSE *ls_mais = NULL, *ls_menos = NULL;
 
-    while(!feof(f)) {
-        while (strcmp(selecao_atual, aux -> selecao) == 0){
+    while (1) {
+        while (strcmp(selecao_atual, aux->selecao) == 0) {
             if (aux->jogos > maisjogos) {
                 maisjogos = aux->jogos;
                 TLSE_lib_rec(ls_mais);
                 ls_mais = NULL;
                 ls_mais = TLSE_insere(ls_mais, aux->id);
-            }
-            else if (aux->jogos == maisjogos) {
+            } else if (aux->jogos == maisjogos) {
                 ls_mais = TLSE_insere(ls_mais, aux->id);
             }
             if (aux->jogos < menosjogos) {
@@ -119,40 +129,49 @@ void BUSCA_2(char *raiz, int t) {
                 TLSE_lib_rec(ls_menos);
                 ls_menos = NULL;
                 ls_menos = TLSE_insere(ls_menos, aux->id);
-            }
-            else if (aux->jogos == menosjogos) {
+            } else if (aux->jogos == menosjogos) {
                 ls_menos = TLSE_insere(ls_menos, aux->id);
             }
-            fread(aux, sizeof(Jogador), 1, f);
+            if (fread(aux, sizeof(Jogador), 1, f) != 1) {
+                break;
+            }
         }
-        
+
         printf("SELEÇÃO: %s\n\n", selecao_atual);
         printf("\tMAIS JOGOS:\n");
-        while(ls_mais){
-            aux2 = TARVBS_busca_jogador(raiz, ls_mais -> info, t);
-            printf("\t\t%s, %d jogos.\n", aux2 -> nome, aux2 -> jogos);
-            ls_mais = ls_mais -> prox;
+        TLSE *temp = ls_mais;
+        while (temp) {
+            aux2 = TARVBS_busca_jogador(raiz, temp->info, t);
+            printf("\t\t%s, %d jogos.\n", aux2->nome, aux2->jogos);
+            temp = temp->prox;
         }
         printf("\tMENOS JOGOS:\n");
-        while(ls_menos){
-            aux2 = TARVBS_busca_jogador(raiz, ls_menos -> info, t);
-            printf("\t\t%s, %d jogos.\n", aux2 -> nome, aux2 -> jogos);
-            ls_menos = ls_menos -> prox;
+        temp = ls_menos;
+        while (temp) {
+            aux2 = TARVBS_busca_jogador(raiz, temp->info, t);
+            printf("\t\t%s, %d jogos.\n", aux2->nome, aux2->jogos);
+            temp = temp->prox;
         }
         printf("\n");
 
-        strcpy(selecao_atual, aux -> selecao);
+        if (feof(f)) {
+            break;
+        }
+
+        strcpy(selecao_atual, aux->selecao);
         TLSE_lib_rec(ls_mais);
         TLSE_lib_rec(ls_menos);
+        ls_mais = NULL;
+        ls_menos = NULL;
         maisjogos = INT_MIN;
         menosjogos = INT_MAX;
     }
+
     free(aux);
     free(aux2);
     fclose(f);
-
-    return;
 }
+
 
 // ======================================================================================================
 
@@ -386,7 +405,7 @@ void BUSCA_7(char *raiz, int t) {
     printf("Nascidos em %d: \n", ano);
     while (list){
         jogador_atual = TARVBS_busca_jogador(raiz, list -> info, t);
-        printf("\t%s", jogador_atual -> nome);
+        printf("\t%s\n", jogador_atual -> nome);
         list = list -> prox;
     }  
 }
